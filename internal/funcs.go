@@ -386,7 +386,11 @@ func (a *ArgType) fieldnames(fields []*Field, prefix string, ignoreNames ...stri
 		if i != 0 {
 			str = str + ", "
 		}
-		str = str + prefix + "." + f.Name
+		if strings.HasPrefix(f.Type, "[]") {
+			str = str + `pq.Array(` + prefix + "." + f.Name + `)`
+		} else {
+			str = str + prefix + "." + f.Name
+		}
 		i++
 	}
 

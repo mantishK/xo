@@ -4,6 +4,7 @@ import (
 	"strconv"
 	"strings"
 	"text/template"
+	"unicode"
 
 	"github.com/knq/snaker"
 
@@ -33,6 +34,7 @@ func (a *ArgType) NewTemplateFuncs() template.FuncMap {
 		"hascolumn":          a.hascolumn,
 		"hasfield":           a.hasfield,
 		"getstartcount":      a.getstartcount,
+		"lowerfirst":         a.lowerfirst,
 	}
 }
 
@@ -639,4 +641,13 @@ func (a *ArgType) hasfield(fields []*Field, name string) bool {
 // getstartcount returns a starting count for numbering columsn in queries
 func (a *ArgType) getstartcount(fields []*Field, pkFields []*Field) int {
 	return len(fields) - len(pkFields)
+}
+
+func (a *ArgType) lowerfirst(str string) string {
+	if len(str) == 0 {
+		return ""
+	}
+	tmp := []rune(str)
+	tmp[0] = unicode.ToLower(tmp[0])
+	return string(tmp)
 }
